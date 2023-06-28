@@ -15,7 +15,20 @@ L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
 
 
 // Perform GET request to query URL 
-d3.json(geoData, function(data) {
+d3.json(geoData).then(function(data) {
     // Get response, send data.features object to the createFeatures function 
     createFeatures(data.features)
 });
+
+// Function for each feature in the features array 
+function createFeatures(earthquakeData) {
+
+    // Give each feature a popup with info 
+    function onEachFeature(feature, layer) {
+        layer.bindPopup('<h3>${feature.properties.place}</h3><hr><p>${new Date(feature.properties.time)}</p>')
+    };
+
+    // GeoJSON layer containing features array on earthquakeData object. 
+    // Run onEachFeature function once for each data point in the array. 
+    
+};
