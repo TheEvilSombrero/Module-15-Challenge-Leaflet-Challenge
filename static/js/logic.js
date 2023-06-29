@@ -1,14 +1,9 @@
 let geoData = "https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_month.geojson"
 
-let geojson; 
-
-let myMap = L.map("map", {
-    center: [37.0902, -95.7129], 
-    zoom: 4
-});
+// let geojson; 
 
 // Perform GET request to query URL 
-d3.json(geoData).then(function(data) {
+d3.json(geoData).then(function (data) {
     // Get response, send data.features object to the createFeatures function 
     createFeatures(data.features)
 });
@@ -28,7 +23,7 @@ function createFeatures(earthquakeData) {
     });
 
     // Send layer to createMap function 
-    createImageBitmap(earthquakes);
+    createMap(earthquakes);
 };
 
 function createMap(earthquakes) {
@@ -42,4 +37,25 @@ function createMap(earthquakes) {
     });
 
     // baseMaps object
+    let baseMaps = {
+        "Street Map": street, 
+        "Topographic Map": topo
+    };
+
+    // Overlay object to hold overlay 
+    let overlayMaps = {
+        Earthquakes: earthquakes
+    };
+
+    // Make the map with layers on display 
+    let myMap = L.map("map", {
+        center: [37.0902, -95.7129], 
+        zoom: 4, 
+        layers: [street, earthquakes]
+    });
+
+    // Layer control pannel 
+    L.control.layers(baseMaps, overlayMaps, {
+        collapsed: false
+    }).addTo(myMap);
 };
