@@ -1,10 +1,9 @@
 let geoData = "https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_month.geojson"
 
-// let geojson; 
-
 // Perform GET request to query URL 
 d3.json(geoData).then(function (data) {
     // Get response, send data.features object to the createFeatures function 
+    console.log(data);
     createFeatures(data.features)
 });
 
@@ -19,11 +18,46 @@ function createFeatures(earthquakeData) {
     // GeoJSON layer containing features array on earthquakeData object. 
     // Run onEachFeature function once for each data point in the array. 
     let earthquakes = L.geoJSON(earthquakeData, {
-        onEachFeature:onEachFeature
+        onEachFeature:onEachFeature, 
+        // Get coordinates for circle 
+        pointToLayer: function(features, coordinates) {
+            let depth = features.properties.mag;
+            let geoMarkers = {
+                radius: depth * 5, 
+                fillColor: colors(depth), 
+                fillOpacity: 0.7, 
+                weight: 0.5
+            };
+        return L.circleMarker(coordinates, geoMarkers);
+        }
     });
 
     // Send layer to createMap function 
     createMap(earthquakes);
+};
+
+// Function for earthquake color via depth
+function colors(depth) {
+    // variable to hold the color
+    let color = "";
+    if (depth <= 1) {
+        return color = "#84fd6c";
+    }
+    else if (depth <= 2) {
+        return color = "#bfd16e";
+    }
+    else if (depth <= 3) {
+        return color = "#ddbf5c";
+    }
+    else if (depth <= 4) {
+        return color = "#e79b37";
+    }
+    else if (depth <= 5) {
+        return color = "#ec7141";
+    }
+    else {
+        return color = "#f82720";
+    }
 };
 
 function createMap(earthquakes) {
