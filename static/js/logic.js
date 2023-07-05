@@ -12,7 +12,7 @@ function createFeatures(earthquakeData) {
 
     // Give each feature a popup with info 
     function onEachFeature(feature, layer) {
-        layer.bindPopup('<h3>${feature.properties.place}</h3><hr><p>${new Date(feature.properties.time)}</p>')
+        layer.bindPopup(`<h3>${feature.properties.place}</h3><hr><p>${new Date(feature.properties.time)}</p>`)
     };
 
     // GeoJSON layer containing features array on earthquakeData object. 
